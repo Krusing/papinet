@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <AssemblyName>PapiNet</AssemblyName>
+    <RootNamespace>PapiNet</RootNamespace>
+
+    <Version>0.0.1</Version>
+    <Authors>Johan Krusing</Authors>
+  </PropertyGroup>
+
+</Project>
