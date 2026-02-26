@@ -1,4 +1,4 @@
-namespace PapiNet.V2R31.Enums;
+namespace PapiNet.V2R31;
 using System.Runtime.Serialization;
 
 public enum DeliveryMessageContextType

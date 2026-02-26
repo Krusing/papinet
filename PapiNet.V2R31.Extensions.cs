@@ -1,6 +1,8 @@
 namespace PapiNet.V2R31.Extensions;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Xml.Linq;
 
 internal static class Extensions
 {
@@ -49,5 +51,42 @@ internal static class Extensions
     {
       return default;
     }
+  }
+
+  public static T GetEnumAttribute<T>(this XElement element, string name, T fallback) where T : struct, Enum
+  {
+    var attr = element.Attribute(name);
+    return attr is null ? fallback : attr.Value.ToEnum<T>();
+  }
+
+  public static T? GetEnumAttribute<T>(this XElement element, string name) where T : struct, Enum
+  {
+    var attr = element.Attribute(name);
+    return attr is null ? null : attr.Value.ToEnum<T>();
+  }
+  
+  [return: NotNullIfNotNull(nameof(fallback))]
+  public static T? GetElement<T>(this XElement root, T? fallback) where T : class
+  {
+    var name = typeof(T).Name;
+    var element = root.Element(name);
+    return element is null ? fallback : (T)Activator.CreateInstance(typeof(T), element)!;
+  }
+
+  public static List<T> GetElements<T>(this XElement root, List<T> fallback) where T : class
+  {
+    var name = typeof(T).Name;
+    return [.. root.Elements(name).Select(e => (T)Activator.CreateInstance(typeof(T), e)!)];
+  }
+
+  public static XAttribute? ToAttribute<T>(this T? value) where T : struct, Enum
+  {
+    if (!value.HasValue) return null;
+    return new XAttribute(typeof(T).Name, value.GetMemberValue());
+  }
+
+  public static XAttribute ToAttribute<T>(this T value) where T : struct, Enum
+  {
+    return new XAttribute(typeof(T).Name, value.GetMemberValue());
   }
 }
